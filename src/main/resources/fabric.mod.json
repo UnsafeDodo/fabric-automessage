@@ -3,23 +3,20 @@
 	"id": "fabric-automessage",
 	"version": "${version}",
 	"name": "Fabric AutoMessage",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This is a mod to send automated messages to the server",
 	"authors": [
-		"Me!"
+		"UnsafeDodo"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/fabric-automessage/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"unsafedodo.fabricautomessage.ExampleMod"
-		],
-		"client": [
-			"unsafedodo.fabricautomessage.ExampleModClient"
+			"unsafedodo.fabricautomessage.AutoMessage"
 		]
 	},
 	"mixins": [
