@@ -2,9 +2,12 @@ package unsafedodo.fabricautomessage.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import unsafedodo.fabricautomessage.AutoMessage;
+import unsafedodo.fabricautomessage.util.CircularLinkedList;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -22,6 +25,10 @@ public class ConfigManager {
                 writer.write(GSON.toJson(configData));
                 writer.close();
             }
+
+            //new addition
+            AutoMessage.messages = new CircularLinkedList<String>(Arrays.asList(configData.messages));
+            AutoMessage.timeout = configData.intervalInSeconds;
 
             success = true;
 

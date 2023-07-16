@@ -8,6 +8,7 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import unsafedodo.fabricautomessage.AutoMessage;
 
 public class AutoMessageSetTimeout {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
@@ -19,6 +20,8 @@ public class AutoMessageSetTimeout {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        AutoMessage.timeout = IntegerArgumentType.getInteger(context, "timeout");
+
         System.out.println("run settimeout command");
         return 0;
     }

@@ -9,10 +9,11 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import unsafedodo.fabricautomessage.AutoMessage;
 import unsafedodo.fabricautomessage.config.ConfigManager;
 
 public class AutoMessageReload {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess  commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
         dispatcher.register(CommandManager.literal("automessage")
                 .then(CommandManager.literal("reload")
                         .requires(Permissions.require("automessage.reload", 3))
@@ -21,6 +22,12 @@ public class AutoMessageReload {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        if (ConfigManager.loadConfig()) {
+            context.getSource().sendFeedback(() -> Text.literal("Reloaded config!"), false);
+        } else {
+            context.getSource().sendError(Text.literal("Error accrued while reloading config!").formatted(Formatting.RED));
+        }
+
         /*var old = ConfigManager.getConfig().allPossibleAutoCompletionKeys;
         if (ConfigManager.loadConfig()) {
             context.getSource().sendFeedback(() -> Text.literal("Reloaded config!"), false);
@@ -31,7 +38,6 @@ public class AutoMessageReload {
         } else {
             context.getSource().sendError(Text.literal("Error occurred while reloading config! Check console for more information!").formatted(Formatting.RED));
         }*/
-        System.out.println("run reload command");
         return 1;
     }
 
