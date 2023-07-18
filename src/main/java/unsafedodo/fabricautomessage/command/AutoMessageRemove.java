@@ -8,6 +8,9 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import unsafedodo.fabricautomessage.util.JsonHandler;
 
 public class AutoMessageRemove {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
@@ -19,7 +22,10 @@ public class AutoMessageRemove {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        System.out.println("run remove command");
+        if(JsonHandler.removeString(IntegerArgumentType.getInteger(context, "index")))
+            context.getSource().sendFeedback(() -> Text.literal("Message removed").formatted(Formatting.GREEN), false);
+        else
+            context.getSource().sendFeedback(() -> Text.literal("Message not found").formatted(Formatting.RED), false);
         return 0;
     }
 }

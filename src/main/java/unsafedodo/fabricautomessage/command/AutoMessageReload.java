@@ -9,7 +9,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import unsafedodo.fabricautomessage.AutoMessage;
 import unsafedodo.fabricautomessage.config.ConfigManager;
 
 public class AutoMessageReload {
@@ -23,11 +22,10 @@ public class AutoMessageReload {
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         if (ConfigManager.loadConfig()) {
-            context.getSource().sendFeedback(() -> Text.literal("Reloaded config!"), false);
+            context.getSource().sendFeedback(() -> Text.literal("Reloaded config!").formatted(Formatting.GREEN), false);
         } else {
             context.getSource().sendError(Text.literal("Error accrued while reloading config!").formatted(Formatting.RED));
         }
-
         /*var old = ConfigManager.getConfig().allPossibleAutoCompletionKeys;
         if (ConfigManager.loadConfig()) {
             context.getSource().sendFeedback(() -> Text.literal("Reloaded config!"), false);

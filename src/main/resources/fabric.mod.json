@@ -20,11 +20,6 @@
 		]
 	},
 	"mixins": [
-		"fabric-automessage.mixins.json",
-		{
-			"config": "fabric-automessage.client.mixins.json",
-			"environment": "client"
-		}
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",

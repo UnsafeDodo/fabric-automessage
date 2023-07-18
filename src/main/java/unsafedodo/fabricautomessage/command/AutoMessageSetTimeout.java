@@ -8,7 +8,11 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import unsafedodo.fabricautomessage.AutoMessage;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import unsafedodo.fabricautomessage.util.JsonHandler;
+
+import java.io.FileNotFoundException;
 
 public class AutoMessageSetTimeout {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
@@ -20,9 +24,13 @@ public class AutoMessageSetTimeout {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        AutoMessage.timeout = IntegerArgumentType.getInteger(context, "timeout");
+        try{
+            if(JsonHandler.addInt(IntegerArgumentType.getInteger(context, "timeout")))
+                context.getSource().sendFeedback(() -> Text.literal("You have changed the timeout!").formatted(Formatting.GREEN), false);
+        } catch (FileNotFoundException e){
+            context.getSource().sendFeedback(() -> Text.literal("Config file not found").formatted(Formatting.RED), false);
+        }
 
-        System.out.println("run settimeout command");
         return 0;
     }
 }
