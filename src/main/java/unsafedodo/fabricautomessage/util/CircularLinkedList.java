@@ -24,6 +24,21 @@ public class CircularLinkedList<T> extends LinkedList<T> {
     }
     public CircularLinkedList(@NotNull Collection<? extends T> c) {
         super(c);
+        CircularListNode prev = null;
+        CircularListNode node = null;
+        for (T elem: c) {
+            if (node == null) {
+                node = new CircularListNode(elem, null, null);
+                this.first = node;
+            } else {
+                node = new CircularListNode(elem, null, prev);
+                prev.setNext(node);
+            }
+            prev = node;
+            ++this.size;
+        }
+        this.last = node;
+        this.current = this.first;
     }
 
     public CircularListNode<T> getNextOrFirst(){
@@ -36,9 +51,20 @@ public class CircularLinkedList<T> extends LinkedList<T> {
 
     public boolean add(T message){
         CircularListNode<T> newNode = new CircularListNode<T>(message, null, last);
-        last.setNext(newNode);
+        System.out.println("HO CREATO IL MIO NODOOOO con stringa: "+newNode.getData());
+        if (last != null) {
+            System.out.println("ENTRO NEL LAST DIVERSO DA NULL");
+            last.setNext(newNode);
+            System.out.println("SETTATO LAST.SETNEXT YOHOOO: "+last.getNext().getData());
+        } else {
+            System.out.println("NOOOO IS NULL OOF...");
+            first = newNode;
+            System.out.println("Stampo first: "+first.getData());
+        }
         last = newNode;
-        size++;
+        System.out.println("STAMPO LAST ORA ..."+last.getData());
+        ++size;
+        System.out.println("STAMPO LA SIZEEE OUUUUUYEAH" + size);
         return true;
     }
 

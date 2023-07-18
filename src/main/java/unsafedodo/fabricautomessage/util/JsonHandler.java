@@ -7,6 +7,7 @@ import unsafedodo.fabricautomessage.config.ConfigData;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class JsonHandler {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -20,6 +21,19 @@ public class JsonHandler {
                 jsonStrings.add(messageToAdd);
                 //configData.messages = (String[]) jsonStrings.toArray();*/
                 AutoMessage.messages.add(messageToAdd);
+                System.out.println("============================ DEBUGGHINO TATTICO ============================");
+                System.out.println("VOGLIO I MSGS");
+                Object[] msgs = AutoMessage.messages.toArray(); // Il tipo dichiarato di msgs deve essere uguale al tipo di ritorno di AutoMessage.messages.toArray()
+                System.out.println(Arrays.toString(msgs)); // Qui controlli pure che i messaggi sono quelli che devono essere ;)
+                System.out.println("HO I MSGS. ORA VOGLIO IL TIMEOUT");
+                int timeout = AutoMessage.timeout;
+                System.out.printf("Timeout = %d", timeout);
+                System.out.println("HO IL TIMEOUT. ORA VOGLIO CONFIGDATA");
+                ConfigData data = new ConfigData(timeout, (String[]) msgs);
+                System.out.println("HO CONFIGDATA. ORA VOGLIO JSON");
+                System.out.println(GSON.toJson(data));
+                System.out.println("HO JSON. PERCHÉ NON FUNZIONO?!");
+                System.out.println("========================= END OF DEBUGGHINO TATTICO ========================");
                 {
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), "UTF-8"));
                     //GSON.toJson(configData, writer);
