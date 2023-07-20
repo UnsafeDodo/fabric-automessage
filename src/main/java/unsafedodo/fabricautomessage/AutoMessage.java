@@ -16,7 +16,5 @@ public class AutoMessage implements ModInitializer {
 			throw new RuntimeException("Could not load config");
 
 		Register.registerCommands();
-		for(String mess: messages)
-			System.out.println(mess);
 	}
 }

@@ -24,10 +24,11 @@ public class AutoMessageAdd {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        System.out.println("ci siamo all'add");
         try{
             if(JsonHandler.addString(StringArgumentType.getString(context, "message")))
                 context.getSource().sendFeedback(() -> Text.literal("Message added!").formatted(Formatting.GREEN), false);
+            else
+                context.getSource().sendFeedback(() -> Text.literal("Error while adding a new message").formatted(Formatting.RED), false);
 
         } catch (FileNotFoundException e){
             context.getSource().sendFeedback(() -> Text.literal("Config file not found").formatted(Formatting.RED), false);

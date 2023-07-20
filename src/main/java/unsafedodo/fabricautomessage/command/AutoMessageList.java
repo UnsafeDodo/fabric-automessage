@@ -9,6 +9,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.commons.lang3.StringUtils;
 import unsafedodo.fabricautomessage.AutoMessage;
 
 public class AutoMessageList {
@@ -20,12 +21,17 @@ public class AutoMessageList {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        String msg = "";
-        for(int i = 0; i < AutoMessage.messages.getSize(); i++){
-            msg += "Index "+i+": "+AutoMessage.messages.get(i)+"\n";
+        if(AutoMessage.messages.getSize() != 0){
+            String msg = "";
+            for(int i = 0; i < AutoMessage.messages.getSize(); i++){
+                msg += "Index "+i+": "+AutoMessage.messages.get(i)+"\n";
+            }
+            String finalMsg = StringUtils.chomp(msg);
+            context.getSource().sendFeedback(()-> Text.literal(finalMsg).formatted(Formatting.AQUA), false);
         }
-        String finalMsg = msg;
-        context.getSource().sendFeedback(()-> Text.literal(finalMsg).formatted(Formatting.AQUA), false);
+        else
+            context.getSource().sendFeedback(() -> Text.literal("There are no messages saved").formatted(Formatting.RED), false);
+
         return 0;
     }
 }

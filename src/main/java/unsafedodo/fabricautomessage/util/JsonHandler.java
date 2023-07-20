@@ -16,29 +16,11 @@ public class JsonHandler {
             File configDir = Paths.get("", "config").toFile();
             File configFile = new File(configDir, "automessage.json");
             if(configFile.exists()){
-                /*ConfigData configData = GSON.fromJson(new InputStreamReader(new FileInputStream(configFile), "UTF-8"), ConfigData.class);
-                CircularLinkedList<String> jsonStrings = new CircularLinkedList<String>(Arrays.asList(configData.messages));
-                jsonStrings.add(messageToAdd);
-                //configData.messages = (String[]) jsonStrings.toArray();*/
                 AutoMessage.messages.add(messageToAdd);
-                System.out.println("============================ DEBUGGHINO TATTICO ============================");
-                System.out.println("VOGLIO I MSGS");
-                Object[] msgs = AutoMessage.messages.toArray(); // Il tipo dichiarato di msgs deve essere uguale al tipo di ritorno di AutoMessage.messages.toArray()
-                System.out.println(Arrays.toString(msgs)); // Qui controlli pure che i messaggi sono quelli che devono essere ;)
-                System.out.println("HO I MSGS. ORA VOGLIO IL TIMEOUT");
-                int timeout = AutoMessage.timeout;
-                System.out.printf("Timeout = %d", timeout);
-                System.out.println("HO IL TIMEOUT. ORA VOGLIO CONFIGDATA");
-                ConfigData data = new ConfigData(timeout, (String[]) msgs);
-                System.out.println("HO CONFIGDATA. ORA VOGLIO JSON");
-                System.out.println(GSON.toJson(data));
-                System.out.println("HO JSON. PERCHÉ NON FUNZIONO?!");
-                System.out.println("========================= END OF DEBUGGHINO TATTICO ========================");
+
                 {
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), "UTF-8"));
-                    //GSON.toJson(configData, writer);
-                    writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, (String[]) AutoMessage.messages.toArray())));
-                    //GSON.toJson(new ConfigData(configData.intervalInSeconds, (String[])jsonStrings.toArray()));
+                    writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, AutoMessage.messages.objToStringArray(AutoMessage.messages.toArray()))));
                     writer.close();
                 }
             }
@@ -60,9 +42,10 @@ public class JsonHandler {
 
             if(configFile.exists()){
                 AutoMessage.timeout = timeout;
+
                 {
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), "UTF-8"));
-                    writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, (String[]) AutoMessage.messages.toArray())));
+                    writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, AutoMessage.messages.objToStringArray(AutoMessage.messages.toArray()))));
                     writer.close();
                 }
             }
@@ -78,30 +61,36 @@ public class JsonHandler {
     }
 
     public static boolean removeString(int index){
-        String mess = "";
-        mess = AutoMessage.messages.get(index);
-        if(mess != ""){
-            try{
-                File configDir = Paths.get("", "config").toFile();
-                File configFile = new File(configDir, "automessage.json");
+        //check if works
+        if(index+1 <= AutoMessage.messages.getSize()){
 
-                if(configFile.exists()){
-                    AutoMessage.messages.remove(index);
-                    {
-                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), "UTF-8"));
-                        writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, (String[]) AutoMessage.messages.toArray())));
-                        writer.close();
-                        return true;
+            String mess = AutoMessage.messages.get(index);
+            if(mess != null){
+                try{
+                    File configDir = Paths.get("", "config").toFile();
+                    File configFile = new File(configDir, "automessage.json");
+
+                    if(configFile.exists()){
+                        //check if .remove works
+                        AutoMessage.messages.remove(index);
+
+                        {
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(configFile), "UTF-8"));
+                            writer.write(GSON.toJson(new ConfigData(AutoMessage.timeout, AutoMessage.messages.objToStringArray(AutoMessage.messages.toArray()))));
+                            writer.close();
+                            return true;
+                        }
                     }
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         }
+
         return false;
     }
 }

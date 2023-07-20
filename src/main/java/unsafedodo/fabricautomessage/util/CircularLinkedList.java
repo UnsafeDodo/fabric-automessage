@@ -3,6 +3,7 @@ package unsafedodo.fabricautomessage.util;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -51,24 +52,34 @@ public class CircularLinkedList<T> extends LinkedList<T> {
 
     public boolean add(T message){
         CircularListNode<T> newNode = new CircularListNode<T>(message, null, last);
-        System.out.println("HO CREATO IL MIO NODOOOO con stringa: "+newNode.getData());
         if (last != null) {
-            System.out.println("ENTRO NEL LAST DIVERSO DA NULL");
             last.setNext(newNode);
-            System.out.println("SETTATO LAST.SETNEXT YOHOOO: "+last.getNext().getData());
         } else {
-            System.out.println("NOOOO IS NULL OOF...");
             first = newNode;
-            System.out.println("Stampo first: "+first.getData());
         }
         last = newNode;
-        System.out.println("STAMPO LAST ORA ..."+last.getData());
         ++size;
-        System.out.println("STAMPO LA SIZEEE OUUUUUYEAH" + size);
+        super.add(message);
         return true;
     }
 
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[this.size];
+        CircularListNode<T> node = this.first;
+        for (int i = 0; i < this.size; i++) {
+            array[i] = node.getData();
+            node = node.getNext();
+        }
+        return array;
+    }
+
+    public String[] objToStringArray(Object[] objArray){
+        return Arrays.stream(objArray).map(Object::toString).toArray(String[]::new);
+    }
+
     public T remove(int index){
+        //check if works
         if(index >= size)
             throw new InvalidParameterException(String.format("List does not contain %d elements", index));
 
@@ -78,8 +89,14 @@ public class CircularLinkedList<T> extends LinkedList<T> {
             firstCopy = firstCopy.getNext();
         }
         T removed = firstCopy.getData();
-        firstCopy.getPrevious().setNext(firstCopy.getNext());
-        firstCopy.getNext().setPrevious(firstCopy.getPrevious());
+        if(index == 0){
+            last.setNext(firstCopy.getNext());
+            firstCopy.getNext().setPrevious(last);
+        } else{
+            firstCopy.getPrevious().setNext(firstCopy.getNext());
+            firstCopy.getNext().setPrevious(firstCopy.getPrevious());
+        }
+
         size--;
         return removed;
     }

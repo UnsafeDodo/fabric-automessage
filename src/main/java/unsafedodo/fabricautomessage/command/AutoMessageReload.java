@@ -26,16 +26,6 @@ public class AutoMessageReload {
         } else {
             context.getSource().sendError(Text.literal("Error accrued while reloading config!").formatted(Formatting.RED));
         }
-        /*var old = ConfigManager.getConfig().allPossibleAutoCompletionKeys;
-        if (ConfigManager.loadConfig()) {
-            context.getSource().sendFeedback(() -> Text.literal("Reloaded config!"), false);
-
-            for (var player : context.getSource().getServer().getPlayerManager().getPlayerList()) {
-                StyledChatUtils.sendAutoCompletion(player, old);
-            }
-        } else {
-            context.getSource().sendError(Text.literal("Error occurred while reloading config! Check console for more information!").formatted(Formatting.RED));
-        }*/
         return 1;
     }
 

@@ -5,8 +5,8 @@ public class ConfigData {
     public String[] messages;
 
 
-    public ConfigData(int interv, String[] mess){
-        this.intervalInSeconds = interv;
+    public ConfigData(int interval, String[] mess){
+        this.intervalInSeconds = interval;
         this.messages = mess;
     }
 
