@@ -32,7 +32,7 @@ public class CircularLinkedList<T> extends LinkedList<T> {
         if(current != null && current.getNext() != null)
             return current.getNext().getData();
 
-        return null;
+        return first.getData();
     }
     public CircularLinkedList(@NotNull Collection<? extends T> c) {
         super(c);
