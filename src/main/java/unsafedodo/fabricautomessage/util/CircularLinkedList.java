@@ -23,6 +23,17 @@ public class CircularLinkedList<T> extends LinkedList<T> {
         this.current = null;
 
     }
+
+    public T getNextData(String currentMessage){
+        CircularListNode<T> current = first;
+        while(current != null && !current.getData().equals(currentMessage))
+            current = current.getNext();
+
+        if(current != null && current.getNext() != null)
+            return current.getNext().getData();
+
+        return null;
+    }
     public CircularLinkedList(@NotNull Collection<? extends T> c) {
         super(c);
         CircularListNode prev = null;
@@ -51,7 +62,7 @@ public class CircularLinkedList<T> extends LinkedList<T> {
     }
 
     public boolean add(T message){
-        CircularListNode<T> newNode = new CircularListNode<T>(message, null, last);
+        CircularListNode<T> newNode = new CircularListNode<T>(message, first, last);
         if (last != null) {
             last.setNext(newNode);
         } else {
@@ -59,6 +70,9 @@ public class CircularLinkedList<T> extends LinkedList<T> {
         }
         last = newNode;
         ++size;
+
+        first.setPrevious(newNode);
+
         super.add(message);
         return true;
     }
@@ -83,21 +97,35 @@ public class CircularLinkedList<T> extends LinkedList<T> {
         if(index >= size)
             throw new InvalidParameterException(String.format("List does not contain %d elements", index));
 
-        CircularListNode<T> firstCopy = first;
+        CircularListNode<T> nodeToRemove = first;
 
         for(int i = 0; i < index; i++){
-            firstCopy = firstCopy.getNext();
+            nodeToRemove = nodeToRemove.getNext();
         }
-        T removed = firstCopy.getData();
-        if(index == 0){
+
+        T removed = nodeToRemove.getData();
+        if(size == 1){
+            first = null;
+            last = null;
+        } else{
+            if(nodeToRemove == first)
+                first = nodeToRemove.getNext();
+            else if(nodeToRemove == last)
+                last = nodeToRemove.getPrevious();
+            else{
+                nodeToRemove.getPrevious().setNext(nodeToRemove.getNext());
+                nodeToRemove.getNext().setPrevious(nodeToRemove.getPrevious());
+            }
+        }
+        /*if(index == 0){
             last.setNext(firstCopy.getNext());
             firstCopy.getNext().setPrevious(last);
         } else{
             firstCopy.getPrevious().setNext(firstCopy.getNext());
             firstCopy.getNext().setPrevious(firstCopy.getPrevious());
-        }
-
+        }*/
         size--;
+        super.remove(index);
         return removed;
     }
 }
