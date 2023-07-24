@@ -26,67 +26,34 @@ import unsafedodo.fabricautomessage.util.CircularLinkedList;
 import unsafedodo.fabricautomessage.util.CircularListNode;
 import unsafedodo.fabricautomessage.util.Register;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 public class AutoMessage implements ModInitializer {
-
-	static Tag createLink(final ArgumentQueue args, final Context ctx) {
-		final String link = args.popOr("The <link> tag requires exactly one argument, the link to open").value();
-
-		return Tag.styling(
-				NamedTextColor.BLUE,
-				TextDecoration.UNDERLINED,
-				ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, link),
-				HoverEvent.showText(Component.text("Open " + link))
-		);
-	}
-
-	Component linkTag(String input) {
-		final MiniMessage extendedInstance = MiniMessage.builder()
-				.tags(TagResolver.resolver("link", AutoMessage::createLink)).build();
-
-
-		return extendedInstance.deserialize(input);
-	}
 	public static CircularLinkedList<String> messages;
 	public static int timeout;
-
 	static MiniMessage mm = MiniMessage.miniMessage();
-	private static String currentMessage;
-
-	/*private static final Pattern urlPattern = Pattern.compile(
-			"(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
-					+ "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
-					+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
-			Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);*/
-
+	private static String currentMessage = null;
 	private static MinecraftServer runningServer;
-
-	static ScheduledExecutorService executorService;
-
-	static Runnable messagePrint = new Runnable() {
+	static ScheduledThreadPoolExecutor ex = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(1);
+	public static ScheduledExecutorService executorService;
+	public static ScheduledFuture<?> scheduledFuture;
+	public static Runnable messagePrint = new Runnable() {
 		@Override
 		public void run() {
 			if(messages.size() > 0){
 				runningServer = getServer();
 				if(runningServer.getPlayerManager().getCurrentPlayerCount() > 0){
+					currentMessage = messages.getNextData(currentMessage);
+					System.out.println(currentMessage);
+
 					Component parsed = mm.deserialize(currentMessage);
 					Audience players = FabricServerAudiences.of(runningServer).players();
-					/*if(currentMessage.matches("(/https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?\\/[a-zA-Z0-9]{2,}|((https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})(\\.[a-zA-Z]{2,})?)|(https:\\/\\/www\\.|http:\\/\\/www\\.|https:\\/\\/|http:\\/\\/)?[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}\\.[a-zA-Z0-9]{2,}(\\.[a-zA-Z0-9]{2,})? /gmi")){
-						runningServer.getPlayerManager().broadcast(Text.literal(currentMessage).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://netflix.com"))), false);
-					}
-					else{
-						runningServer.getPlayerManager().broadcast(Text.literal(currentMessage), false);
-					}*/
 					players.sendMessage(parsed);
-					//runningServer.getPlayerManager().broadcast(Text.literal(currentMessage), false);
-					System.out.println(currentMessage);
-					currentMessage = messages.getNextData(currentMessage);
 				}
 			}
+			//scheduledFuture = executorService.schedule(messagePrint, AutoMessage.timeout, TimeUnit.SECONDS);
+
 		}
 	};
 
@@ -94,8 +61,10 @@ public class AutoMessage implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			runningServer = server;
 
-			executorService = new ScheduledThreadPoolExecutor(1);
-			executorService.scheduleAtFixedRate(messagePrint, 0, AutoMessage.timeout, TimeUnit.SECONDS);
+			ex.setRemoveOnCancelPolicy(true);
+			executorService = ex;
+
+			scheduledFuture = executorService.scheduleAtFixedRate(messagePrint, 0, AutoMessage.timeout, TimeUnit.SECONDS);
 			System.out.println("Server started and instance saved");
 		});
 	}
@@ -113,9 +82,9 @@ public class AutoMessage implements ModInitializer {
 			throw new RuntimeException("Could not load config");
 
 		Register.registerCommands();
-		if(messages.size() > 0){
+		/*if(messages.size() > 0){
 			currentMessage = messages.getFirst();
-		}
+		}*/
 	}
 
 	public static MinecraftServer getServer(){

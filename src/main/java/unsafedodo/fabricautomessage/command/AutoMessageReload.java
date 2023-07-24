@@ -9,7 +9,12 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import unsafedodo.fabricautomessage.AutoMessage;
 import unsafedodo.fabricautomessage.config.ConfigManager;
+
+import java.util.concurrent.TimeUnit;
+
+import static unsafedodo.fabricautomessage.AutoMessage.*;
 
 public class AutoMessageReload {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess  commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment){
@@ -26,6 +31,10 @@ public class AutoMessageReload {
         } else {
             context.getSource().sendError(Text.literal("Error accrued while reloading config!").formatted(Formatting.RED));
         }
+
+        //executorService.schedule(messagePrint,  AutoMessage.timeout, TimeUnit.SECONDS);
+        scheduledFuture.cancel(false);
+        scheduledFuture = executorService.scheduleAtFixedRate(messagePrint, 0, timeout, TimeUnit.SECONDS);
         return 1;
     }
 

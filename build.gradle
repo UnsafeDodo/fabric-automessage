@@ -16,12 +16,6 @@ repositories {
 		url 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
 
-	maven {
-		name = "sonatype-oss-snapshots1"
-		url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-		mavenContent { snapshotsOnly() }
-	}
-
 	mavenCentral()
 }
 
@@ -49,7 +43,6 @@ dependencies {
 
 	modImplementation include("net.kyori:adventure-platform-fabric:5.9.0")
 	modImplementation "net.kyori:adventure-text-minimessage:4.14.0"
-	include(modImplementation("ca.stellardrift:colonel:0.2"))
 }
 
 processResources {
