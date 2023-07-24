@@ -7,7 +7,6 @@ import unsafedodo.fabricautomessage.config.ConfigData;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class JsonHandler {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -71,7 +70,6 @@ public class JsonHandler {
                     File configFile = new File(configDir, "automessage.json");
 
                     if(configFile.exists()){
-                        //check if .remove works
                         AutoMessage.messages.remove(index);
 
                         {

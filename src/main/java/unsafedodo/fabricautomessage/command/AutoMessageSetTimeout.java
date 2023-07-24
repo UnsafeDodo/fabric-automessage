@@ -10,7 +10,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import unsafedodo.fabricautomessage.AutoMessage;
 import unsafedodo.fabricautomessage.util.JsonHandler;
 
 import java.io.FileNotFoundException;

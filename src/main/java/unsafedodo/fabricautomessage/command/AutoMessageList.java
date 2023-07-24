@@ -5,16 +5,13 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.Audiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.apache.commons.lang3.StringUtils;
 import unsafedodo.fabricautomessage.AutoMessage;
 
 public class AutoMessageList {
@@ -27,7 +24,6 @@ public class AutoMessageList {
     }
 
     public static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        MinecraftServer runningServer = AutoMessage.getServer();
         Audience player = context.getSource().getPlayer();
 
         if(AutoMessage.messages.getSize() != 0){

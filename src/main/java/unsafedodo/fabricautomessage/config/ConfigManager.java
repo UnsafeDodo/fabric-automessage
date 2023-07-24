@@ -8,10 +8,6 @@ import unsafedodo.fabricautomessage.util.CircularLinkedList;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import static unsafedodo.fabricautomessage.AutoMessage.executorService;
-import static unsafedodo.fabricautomessage.AutoMessage.messagePrint;
 
 public class ConfigManager {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();

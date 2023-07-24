@@ -8,8 +8,8 @@
 		"UnsafeDodo"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/UnsafeDodo/fabric-automessage",
+		"sources": "https://github.com/UnsafeDodo/fabric-automessage"
 	},
 	"license": "MIT",
 	"icon": "assets/fabric-automessage/icon.png",
