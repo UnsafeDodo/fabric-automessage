@@ -30,7 +30,7 @@ public class AutoMessageList {
             String msg = "-----------------------------------------------------\n";
             msg += String.format("<aqua>Timeout: <yellow>%d<reset>\n\n", AutoMessage.timeout);
             for(int i = 0; i < AutoMessage.messages.getSize(); i++){
-                msg += "<aqua>Index "+i+":</aqua>"+" "+AutoMessage.messages.get(i)+"\n";
+                msg += "<reset><aqua>Index "+i+":</aqua>"+" "+AutoMessage.messages.get(i)+"\n";
             }
             msg += "<reset>-----------------------------------------------------";
             Component finalMsg = mm.deserialize(msg);
