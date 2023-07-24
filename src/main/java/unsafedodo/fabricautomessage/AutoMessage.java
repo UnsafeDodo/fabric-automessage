@@ -45,15 +45,12 @@ public class AutoMessage implements ModInitializer {
 				runningServer = getServer();
 				if(runningServer.getPlayerManager().getCurrentPlayerCount() > 0){
 					currentMessage = messages.getNextData(currentMessage);
-					System.out.println(currentMessage);
 
 					Component parsed = mm.deserialize(currentMessage);
 					Audience players = FabricServerAudiences.of(runningServer).players();
 					players.sendMessage(parsed);
 				}
 			}
-			//scheduledFuture = executorService.schedule(messagePrint, AutoMessage.timeout, TimeUnit.SECONDS);
-
 		}
 	};
 
@@ -65,14 +62,12 @@ public class AutoMessage implements ModInitializer {
 			executorService = ex;
 
 			scheduledFuture = executorService.scheduleAtFixedRate(messagePrint, 0, AutoMessage.timeout, TimeUnit.SECONDS);
-			System.out.println("Server started and instance saved");
 		});
 	}
 
 	static {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			executorService.shutdown();
-			System.out.println("Server stopped");
 		});
 	}
 
@@ -82,9 +77,6 @@ public class AutoMessage implements ModInitializer {
 			throw new RuntimeException("Could not load config");
 
 		Register.registerCommands();
-		/*if(messages.size() > 0){
-			currentMessage = messages.getFirst();
-		}*/
 	}
 
 	public static MinecraftServer getServer(){
