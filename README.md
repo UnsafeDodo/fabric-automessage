@@ -37,5 +37,9 @@ You can find the config file in `./config/automessage.json`
    ] //you can add your messages here
 }
 ```
+
+### Discord
+Join my [discord server](https://discord.gg/tExFemXyJS) if you need support for one of my mods!
+
 ## Showcase
 ![Screenshot](https://i.imgur.com/eZftQI4.png)
